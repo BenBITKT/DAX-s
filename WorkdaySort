@@ -1,0 +1,18 @@
+-- this is how I created a slider for the working day
+
+WorkdaySort = 
+    VAR _sort =
+        CALCULATE(
+            COUNT('Dates'[Dates]),
+            FILTER(
+                'Dates',
+                'Dates'[Month] = EARLIER(Dates[Month])
+                    && 'Dates'[Dates] <= EARLIER(Dates[Dates])
+                    && 'Dates'[Year] = EARLIER(Dates[Year])
+                    && NOT 'Dates'[Workday] IN {6, 7}
+            )
+        )
+    VAR _result =
+        IF( NOT 'Dates'[Workday]    IN {6, 7}, _sort )
+    RETURN
+        _result
