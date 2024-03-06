@@ -1,0 +1,4 @@
+-- convert a month number into "mmm"
+
+MthName = FORMAT(UK_Pre_Budget_Report_Query[Month] * 29, "mmm")
+
