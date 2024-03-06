@@ -1,0 +1,10 @@
+-- create two buttons to make a parameter to switch between graphs displayed
+
+Fiscal Measure Selected = 
+    IF(
+            HASONEVALUE('Table'[Metric]),
+                SWITCH(
+                    VALUES('Table'[Metric]),
+                        "Profit", (SUM(KISS_Sales_Flat_File[Total_Line_Value]) - SUM(KISS_Sales_Flat_File[Total_Line_Cost])),
+                        "Sales",   SUM(KISS_Sales_Flat_File[Total_Line_Value])))
+
