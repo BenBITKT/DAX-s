@@ -1,0 +1,7 @@
+-- return a specific results from multiple conditions
+
+Period = SWITCH(TRUE(),
+    MONTH(UK_Pre_Budget_Report_Query[INVDATE]) = MONTH(TODAY())   && YEAR(UK_Pre_Budget_Report_Query[INVDATE])  = YEAR(TODAY())-1, "1",
+    MONTH(UK_Pre_Budget_Report_Query[INVDATE]) = MONTH(TODAY())   && YEAR(UK_Pre_Budget_Report_Query[INVDATE])  = YEAR(TODAY()),   "2",
+    MONTH(UK_Pre_Budget_Report_Query[INVDATE]) = MONTH(TODAY())+1 && YEAR(UK_Pre_Budget_Report_Query[INVDATE])  = YEAR(TODAY())-1, "3"
+)
