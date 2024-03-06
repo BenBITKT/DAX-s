@@ -1,0 +1,18 @@
+-- this is how to do a large concatenate 
+
+Text = 
+    CONCATENATE(FORMAT( Dates[.1 - Report Date].[Date], "mmm yyyy"),
+    CONCATENATE(" to end of ",
+    CONCATENATE(FORMAT(TODAY()-1,"dd"),     
+    CONCATENATE('Dates'[st/nd/rd/th],
+    CONCATENATE(" (",
+    CONCATENATE('Dates'[WorkingDaysToday],
+    CONCATENATE(" working days) and ",
+    CONCATENATE(FORMAT('Dates'[.3 - ThisMonthLastYear].[Date], "mmm yyyy"),
+    CONCATENATE(" to end of ",
+    CONCATENATE(FORMAT(Dates[CurrentMonthWorkingDaysTMLY].[Date],"dd"),
+    CONCATENATE("th",
+    CONCATENATE(" (to match ",
+    CONCATENATE('Dates'[WorkingDaysToday],
+    " working days)."
+    )))))))))))))
