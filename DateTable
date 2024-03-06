@@ -1,0 +1,21 @@
+-- DAX to create a date table
+
+Date Table = 
+    VAR MinYear = YEAR ( DATE ( 2022, 01, 01 ) )
+    VAR MaxYear = YEAR ( TODAY() )
+RETURN
+    ADDCOLUMNS (
+        FILTER (
+            CALENDAR (
+            DATE ( MinYear, 01, 01 ),
+            TODAY()            
+            ),
+            AND (
+                YEAR ( [Date] ) >= MinYear, 
+                YEAR ( [Date] ) <= MaxYear
+            )
+        ),
+        "Year", YEAR ( [Date] ),
+        "Month", MONTH ( [Date] ),
+        "WeekNum", WEEKNUM ( [Date] )
+    )
