@@ -1,0 +1,3 @@
+-- first day of the month calc, and formatting to day
+
+FORMAT( STARTOFMONTH('Dates'[.3 - ThisMonthLastYear].[Date]) + 'Dates'[Working Days Last Month], "dd")
