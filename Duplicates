@@ -1,0 +1,20 @@
+-- removes duplicates
+
+Duplicates = IF( CONTAINSROW ( 
+    {
+    "CORLACK MECHANICAL",
+    "KEARNEY TYRE SERVICE LTD",
+    "EXPRESS TYRE CENTRE,",
+    "THE TYRE & AUTO CENTRE LTD",
+    "GK 4X4 SALES",
+    "Lakeland Tyres Lisnaskea Limited",
+    "MACTRAX IRELAND LTD.,",
+    "McNAMEE TYRE SERVICES LTD.,",
+    "MODERN TYRES LTD",
+    "QUICK FIT GALWAY,",
+    "RAILWAY TYRES,",
+    "ULSTER TYRE CO. LTD.,",
+    "WEST TYRE,"
+    }, 
+    KISS_Sales_Flat_File[Account_Name]),
+    "Remove", "Leave")
