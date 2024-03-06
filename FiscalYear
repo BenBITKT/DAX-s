@@ -1,0 +1,23 @@
+--DAX to create the fiscal year
+
+FiscalYear = 
+    VAR FirstFiscalMonth = 4
+    RETURN
+        IF(
+            Budget[Month] >= FirstFiscalMonth,
+            Budget[Year] + 1,
+            Budget[Year]
+        )
+
+
+-- DAX to sort the fiscal months ie Apr - Mar
+
+FiscalMonthNo = 
+    VAR FirstFiscalMonth = 4
+    RETURN
+        IF (
+            'Budget'[Month] >= FirstFiscalMonth,
+            'Budget'[Month] - 3, 
+            'Budget'[Month] + 9 
+        )
+
