@@ -1,0 +1,4 @@
+-- DAX to calculate the working days in the current month
+-- DAX takes into account Bank Holidays that have been listed as a seperate table
+
+WorkingDays = NETWORKDAYS(STARTOFMONTH(Dates[.1 - Report Date].[Date]), EOMONTH(TODAY(),0), 1, VALUES(Dates[Bank Hols2.Bank Hols]))
