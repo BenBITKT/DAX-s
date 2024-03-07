@@ -1,0 +1,13 @@
+-- measure to find the difference percentage
+
+AvgVar% = DIVIDE( 
+
+    [AvgSellingVar], 
+
+    CALCULATE( 
+
+        [Avg Selling Price], 
+
+        FILTER('UK_Pre_Budget_Report_Query', UK_Pre_Budget_Report_Query[Month-Year] = MAX(UK_Pre_Budget_Report_Query[Month-Year])) 
+
+)) 
