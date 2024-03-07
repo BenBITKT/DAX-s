@@ -1,0 +1,22 @@
+-- measure to find the difference 
+
+AvgSellingVar = 
+ IF(BLANK(), 
+
+    HASONEVALUE(UK_Pre_Budget_Report_Query[Month-Year]),  --the column split 
+
+    CALCULATE( 
+
+        [Avg Selling Price], 
+
+        FILTER('UK_Pre_Budget_Report_Query', UK_Pre_Budget_Report_Query[Month-Year] = MAX(UK_Pre_Budget_Report_Query[Month-Year])) 
+
+    ) 
+
+    -CALCULATE( 
+
+        [Avg Selling Price], 
+
+        FILTER('UK_Pre_Budget_Report_Query', UK_Pre_Budget_Report_Query[Month-Year] = MIN(UK_Pre_Budget_Report_Query[Month-Year])) 
+
+    )) 
