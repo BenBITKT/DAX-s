@@ -1,0 +1,13 @@
+-- renaming dax
+
+House Brand Grouping = 
+    SWITCH(TRUE(),
+        UK_Pre_Budget_Report_Query[Brand] = "BKT",         "Agri",
+        UK_Pre_Budget_Report_Query[Brand] = "ALLIANCE",    "Agri",
+        UK_Pre_Budget_Report_Query[Brand] = "MALHOTRA",    "Agri",
+        UK_Pre_Budget_Report_Query[Brand] = "MAXAM",       "Agri",
+        UK_Pre_Budget_Report_Query[Brand] = "DYNAMAXX",    "Agri",
+        UK_Pre_Budget_Report_Query[Brand] = "SAILUN",      "Truck",
+        UK_Pre_Budget_Report_Query[Brand] = "DOUBLE COIN", "Truck",
+        UK_Pre_Budget_Report_Query[Brand] = "LONGMARCH",   "Truck"
+    )
