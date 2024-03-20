@@ -1,3 +1,8 @@
+-- create two columns
+
+Work Day = 
+    IF(WEEKDAY(UK_Pre_Budget_Report_Query[INVDATE],2)>=6,0,1) //find week end
+
 Work Date With WE = 
     IF(UK_Pre_Budget_Report_Query[Work Day] = 0, MAXX( FILTER(UK_Pre_Budget_Report_Query, UK_Pre_Budget_Report_Query[INVDATE] < EARLIER(UK_Pre_Budget_Report_Query[INVDATE])
         && UK_Pre_Budget_Report_Query[Work Day] <> EARLIER(UK_Pre_Budget_Report_Query[Work Day]) ), UK_Pre_Budget_Report_Query[INVDATE]), UK_Pre_Budget_Report_Query[INVDATE])
