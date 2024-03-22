@@ -1,0 +1,98 @@
+How to create a table for Fiscal Year
+
+
+On Ribbon select 'New table'
+
+In the formula bar enter:
+
+Calendar = 
+CALENDARAUTO(3)  --remove the '3' for calendar year
+
+This lists all the dates in the period
+
+
+Next add a column for Month Name. In the formula bar enter:
+
+
+Month = 
+FORMAT( 'Calendar'[Date].[Date],"mmm")
+
+
+Add another column and formula:
+
+
+
+Month Sort Order = 
+MONTH(EDATE('Calendar'[Date],-3))  --remove the '3' for calendar year
+
+
+Now to get the Fiscal Year, add column and formula:
+
+
+
+FY = 
+VAR CY = RIGHT(YEAR('Calendar'[Date]), 2)
+VAR LY = RIGHT(YEAR('Calendar'[Date])-1, 2)
+VAR NY = RIGHT(YEAR('Calendar'[Date])+1, 2)
+VAR FiscalYear = 
+    IF(
+        MONTH('Calendar'[Date]) >= 4,
+        CY & "-" & NY,
+        LY & "-" & CY
+    )
+RETURN
+FiscalYear  --for calendar year this is not necessary, just do following measure Year = YEAR('Calendar'[Date])
+
+
+
+This can be replicated for Calendar Year or Rolling 12. Get the Sort/Index/Rank right and it should be straightforward.
+
+Do a conjoined table to union multiple date tables eg:
+
+
+
+ConjoinedTable = 
+UNION(
+    SELECTCOLUMNS(
+        'Calendar',
+        "Date", 'Calendar'[Date],
+        "Year", 'Calendar'[Year],
+        "Month", "CY " & 'Calendar'[Month],
+        "Label", "By CalYear",
+        "Sort", 'Calendar'[Index]
+    ),
+    SELECTCOLUMNS(
+        'Fiscal',
+        "Date", 'Fiscal'[Date],
+        "Year", 'Fiscal'[FY],
+        "Month", "FY " & 'Fiscal'[Month],
+        "Label", "By FisYear",
+        "Sort", 'Fiscal'[Month Sort Order]
+    ),
+    SELECTCOLUMNS(
+        'Rolling',
+        "Date", 'Rolling'[Date],
+        "Year", 'Rolling'[LTMPeriod],
+        "Month", "RY " & 'Rolling'[Month],
+        "Label", "By RolYear",
+        "Sort", 'Rolling'[Rank]
+    )
+)
+
+
+To filter the data for each calendar type add a slicer and use the 'Label' measure as the control
+
+
+Then to add values, do the following measures:
+
+
+SalesBaseMeasure = SUM(UK_Pre_Budget_Report_Query[LINETOTAL])
+
+
+
+Sales = 
+CALCULATE(
+    [SalesBaseMeasure],
+    TREATAS(VALUES(ConjoinedTable[Date]), 'UK_Pre_Budget_Report_Query'[INVDATE])
+)
+
