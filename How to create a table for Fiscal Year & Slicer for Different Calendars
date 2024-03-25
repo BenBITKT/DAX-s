@@ -1,6 +1,6 @@
 How to create a table for Fiscal Year
 
-
+STEP 1
 On Ribbon select 'New table'
 
 In the formula bar enter:
@@ -50,7 +50,7 @@ This can be replicated for Calendar Year or Rolling 12. Get the Sort/Index/Rank 
 Do a conjoined table to union multiple date tables eg:
 
 
-
+STEP 2
 ConjoinedTable = 
 UNION(
     SELECTCOLUMNS(
@@ -82,7 +82,7 @@ UNION(
 
 To filter the data for each calendar type add a slicer and use the 'Label' measure as the control
 
-
+STEP 3
 Then to add values, do the following measures:
 
 
