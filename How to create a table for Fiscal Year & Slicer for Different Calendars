@@ -23,7 +23,7 @@ Add another column and formula:
 
 
 Month Sort Order = 
-MONTH(EDATE('Calendar'[Date],-3))  --remove the '3' for calendar year
+MONTH(EDATE('Calendar'[Date],-3))  --change to '0' for calendar year
 
 
 Now to get the Fiscal Year, add column and formula:
@@ -47,10 +47,11 @@ FiscalYear  --for calendar year this is not necessary, just do following measure
 
 This can be replicated for Calendar Year or Rolling 12. Get the Sort/Index/Rank right and it should be straightforward.
 
-Do a conjoined table to union multiple date tables eg:
+If doing a slicer to flip from fiscal year to calendar year, then repeat step 1 for calendar year. If doing rolling 12 then repeat step 1 for rolling 12
 
 
 STEP 2
+Do a conjoined table to union multiple date tables eg:
 ConjoinedTable = 
 UNION(
     SELECTCOLUMNS(
@@ -96,3 +97,4 @@ CALCULATE(
     TREATAS(VALUES(ConjoinedTable[Date]), 'UK_Pre_Budget_Report_Query'[INVDATE])
 )
 
+When doing graphs the sort will need to be in the X axis.
