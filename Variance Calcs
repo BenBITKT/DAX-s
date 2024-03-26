@@ -1,0 +1,24 @@
+-- if need to add a variance column and a variance percentage
+
+-- variance measure dax
+Sales Variance = 
+    VAR currentvalue = [Sales]
+    VAR maxyear = MAX(ConjoinedTable[Year])
+    VAR minyear = MIN(ConjoinedTable[Year])
+    VAR maxyearvalue = CALCULATE([Sales], ConjoinedTable[Year] = maxyear)
+    VAR minyearvalue = CALCULATE([Sales], ConjoinedTable[Year] = minyear)
+    RETURN IF(HASONEVALUE(ConjoinedTable[Year]), currentvalue, maxyearvalue-minyearvalue)
+
+-- variance % measure dax
+
+SalesVar% = 
+
+DIVIDE( [Sales Variance] ,
+
+VAR currentvalue = [Sales]
+VAR minyear = MIN(ConjoinedTable[Year])
+VAR minyearvalue = 
+    CALCULATE([Sales], ConjoinedTable[Year] = minyear)
+RETURN
+    IF(HASONEVALUE(ConjoinedTable[Year]), currentvalue, minyearvalue )
+)
