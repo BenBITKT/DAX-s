@@ -1,0 +1,6 @@
+IF(
+    ISINSCOPE(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+    RANKX(
+       ALLSELECTED(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            [MaxYearSales], ,ASC
+))
