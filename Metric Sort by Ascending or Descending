@@ -1,0 +1,61 @@
+-- need to create two tables; labels table and metric table (see wasp for example)
+
+-- the labels tables will include symbol ▲ and ▼. to get the symbols press Windows and full stop. the symbols will be in the slicer
+-- create a labels table with two columns; label and name. name will be ASC and DESC against each symbol
+
+-- the metric table will just be list of metrics to filter by, eg "sales", "quantiry" and "profit". these will also be in a slicer
+
+-- below is the dax to will use the symbols and the metric to rank and sort
+
+RankSort = 
+IF(SELECTEDVALUE(Sort[Name]) = "Asc",
+    SWITCH(
+        SELECTEDVALUE('Metric Table'[Metric])
+        ,"Sales",   
+         IF(
+            ISINSCOPE(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            RANKX(
+            ALLSELECTED(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            [MaxYearSales], ,ASC
+        ))
+        ,"Quantity",
+         IF(
+            ISINSCOPE(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            RANKX(
+            ALLSELECTED(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            [MaxYearQuantity], ,ASC
+            ))
+        ,"Profit",
+         IF(
+            ISINSCOPE(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            RANKX(
+            ALLSELECTED(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            [MaxYearProfit], ,ASC
+            ))
+        ,[MaxYearSales]),
+    SWITCH(
+        SELECTEDVALUE('Metric Table'[Metric])
+        ,"Sales",   
+         IF(
+            ISINSCOPE(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            RANKX(
+            ALLSELECTED(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            [MaxYearSales], ,DESC
+        ))
+        ,"Quantity",
+         IF(
+            ISINSCOPE(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            RANKX(
+            ALLSELECTED(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            [MaxYearQuantity], ,DESC
+            ))
+        ,"Profit",
+         IF(
+            ISINSCOPE(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            RANKX(
+            ALLSELECTED(UK_Pre_Budget_Report_Query[Customers_Proper.NAME]),
+            [MaxYearProfit], ,DESC
+            ))
+        ,[MaxYearSales]
+    )
+)
