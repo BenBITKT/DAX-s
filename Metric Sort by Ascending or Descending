@@ -1,4 +1,6 @@
 -- need to create two tables; labels table and metric table (see wasp for example)
+-- link to youtube vid https://www.youtube.com/watch?v=aFSNZFdWk5A
+
 
 -- the labels tables will include symbol ▲ and ▼. to get the symbols press Windows and full stop. the symbols will be in the slicer
 -- create a labels table with two columns; label and name. name will be ASC and DESC against each symbol
