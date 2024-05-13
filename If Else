@@ -1,0 +1,4 @@
+Customer Type = 
+    SWITCH(TRUE(),
+        'Sailun Dealerships'[TRLIST2] = 8, "Sailun Dealers", "Non-Dealer"
+    )
