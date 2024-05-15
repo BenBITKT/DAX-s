@@ -1,0 +1,22 @@
+-- Calculation Groups are a way to organise measures in a matrix table
+-- Normally in metrix tables, power bi will sort the columns like:
+
+--Jan 24            Feb 24             Mar 24
+--Quantity    Sales Quantity    Sales  Quantity    Sales
+
+-- First step is to tell power bi to use 'calculation groups'
+
+-- Open the desktop app and go to 'File \ Options and settings \ Options \ Preview features' and tick the box that says 'Model explorer and Calculation group authoring'. Click 'Ok' and then restart the desktop app
+
+-- Open the desktop app and go to 'Model view' (the icon of the three boxes). Under 'Data \ Model' Click on 'Calculation groups' and select 'Add' then give the group a name eg 'Metrics'
+
+-- This process will add a table with the name provided
+
+-- In the table will be a 'Calculation item' defaulted with the calculation '= SELECTEDVALUE'. Change this to the calculation required eg "Quantity = SUM(... QUANTITY)
+-- Add new items for each measure required eg sales, profit average selling price
+
+-- Go back to 'Report view' and the new group will be in a seperate table. Drag the group into the 'Columns' field on the visualizations pane
+
+
+-- example report is SAIL
+-- source link https://community.fabric.microsoft.com/t5/Community-Blog/Calculation-Groups-in-Power-BI/ba-p/3590905
