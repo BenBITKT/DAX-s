@@ -1,5 +1,5 @@
 -- Calculation Groups are a way to organise measures in a matrix table
--- Normally in metrix tables, power bi will sort the columns like:
+-- Normally in matrix tables, power bi will sort the columns like:
 
 --Jan 24            Feb 24             Mar 24
 --Quantity    Sales Quantity    Sales  Quantity    Sales
@@ -12,11 +12,46 @@
 
 -- This process will add a table with the name provided
 
--- In the table will be a 'Calculation item' defaulted with the calculation '= SELECTEDVALUE'. Change this to the calculation required eg "Quantity = SUM(... QUANTITY)
+-- Calculation groups will only apply to measures. So whatever needs to be in the table will need transferring to a measure. Eg Qty = SUM(... QUANTITY)
+
+-- In the table will be a 'Calculation item' defaulted with the calculation '= SELECTEDVALUE'. Change this to the calculation required eg Qty
 -- Add new items for each measure required eg sales, profit average selling price
 
--- Go back to 'Report view' and the new group will be in a seperate table. Drag the group into the 'Columns' field on the visualizations pane
+-- Go back to 'Report view' and the new group will be in a seperate table. Drag the group into the 'Columns' field on the visualizations pane then drag in one of the measures eg 'Qty'
 
+-- We can also create a Calculation Group to add totals for the period, same period has last year and a Growth percentage
+
+-- Add a new calculation group and call KPI's
+
+-- Change the Calculation item to Period and leave the calculuation as 'Period = SELECTEDMEASE()'
+
+-- For the same period as last year add a new calculation item and use this calc:
+
+LY = 
+ IF(
+    NOT ( ISINSCOPE('Sailun Dealerships'[Month])),
+        CALCULATE(
+            SELECTEDMEASURE(),
+            SAMEPERIODLASTYEAR('Sailun Dealerships'[INVDATE].[Date])
+        )
+ )
+
+
+-- For the Growth% use this calc:
+Growth% = 
+VAR CY = SELECTEDMEASURE()
+VAR LY = 
+    CALCULATE(
+        SELECTEDMEASURE(),
+        SAMEPERIODLASTYEAR( 'Sailun Dealerships'[INVDATE].[Date])
+    )
+RETURN
+    IF(
+        CY && LY && NOT ( ISINSCOPE('Sailun Dealerships'[Month])),
+        DIVIDE( CY, LY ) - 1)
+
+
+-- If using two calculaiton groups remember to stack then as Metrics, KPI's and Month Name in the 'Columns' pane
 
 -- example report is SAIL
 -- source link https://community.fabric.microsoft.com/t5/Community-Blog/Calculation-Groups-in-Power-BI/ba-p/3590905
