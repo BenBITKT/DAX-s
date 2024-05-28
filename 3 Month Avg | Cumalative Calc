@@ -1,0 +1,22 @@
+-- To create a 3 month average (or any average for a period) involves creating three measures
+
+-- 1- Cumalative Calculation
+-- CumalativeCalc = 
+    CALCULATE(
+        [Metric Selected],
+        FILTER(ALLSELECTED('Sailun Dealerships'),
+        'Sailun Dealerships'[INVDATE] <= MAX('Sailun Dealerships'[INVDATE]))
+    )
+
+-- 2- 3 Month Sum
+-- 3MthSum = 
+    CALCULATE(
+        [CumalativeCalc],
+        DATESINPERIOD('Sailun Dealerships'[INVDATE], MAX('Sailun Dealerships'[INVDATE]), -3, MONTH)
+)
+
+-- 3- 3 Month Average
+-- 3mthAvg = 
+    DIVIDE([3MthSum], 3)
+
+-- example report -  DA-S report
