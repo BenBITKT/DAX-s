@@ -14,13 +14,30 @@
 
 -- Calculation groups will only apply to measures. So whatever needs to be in the table will need transferring to a measure. Eg Qty = SUM(... QUANTITY)
 
--- In the table will be a 'Calculation item' defaulted with the calculation '= SELECTEDVALUE'. Change this to the calculation required eg Qty
+-- In the table will be a 'Calculation item' defaulted with the calculation '= SELECTEDMEASURE'. Change this to the calculation required eg Qty
 -- Add new items for each measure required eg sales, profit average selling price
 
 -- Go back to 'Report view' and the new group will be in a seperate table. Drag the group into the 'Columns' field on the visualizations pane then drag in one of the measures eg 'Qty'
 
 -- We can also create a Calculation Group to add totals for the period, same period has last year and a Growth percentage
 
+
+-- If the table calls for a comparsion against multiple metrics (like on BISON) then the varaince and variance% calcs need to be in the same calculation group as the metrics (see BISON 5.2 for more)
+
+Qty Variance = 
+    SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Buy_In_Qty]) - 
+    SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Sell_Out_Qty])
+
+Qty Variance % = 
+    FORMAT(
+    DIVIDE( SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Buy_In_Qty]) - 
+        SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Sell_Out_Qty]) , 
+        SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Buy_In_Qty]) 
+    ),
+    "percent")
+
+
+-- If the table calls for a comparison on a single metrics (like in the Dealership Analysis - Sailun report) then follow the steps below:
 -- Add a new calculation group and call KPI's
 
 -- Change the Calculation item to Period and leave the calculuation as 'Period = SELECTEDMEASE()'
