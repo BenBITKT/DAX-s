@@ -4,15 +4,17 @@
 --Jan 24            Feb 24             Mar 24
 --Quantity    Sales Quantity    Sales  Quantity    Sales
 
--- First step is to tell power bi to use 'calculation groups'
+-- Calculaton groups are a way to apply parameters across a number of measures without having to create numerous seperate measures. The term '=SELECECTMEASURE' is used to apply whatever conditions 
+-- needed to all measures eg on BISON the measures are 'Buy_In_Qty' and 'Sell_Out_Qty'. The conditions applied are quantitys for all years, then previous year quantity and also a variance. 
+-- Theses conditions are applied both measures
+
+-- First step is to tell power bi to use 'calculation groups' (this step is not required on latest verisons of power bi)
 
 -- Open the desktop app and go to 'File \ Options and settings \ Options \ Preview features' and tick the box that says 'Model explorer and Calculation group authoring'. Click 'Ok' and then restart the desktop app
-
 -- Open the desktop app and go to 'Model view' (the icon of the three boxes). Under 'Data \ Model' Click on 'Calculation groups' and select 'Add' then give the group a name eg 'Metrics'
 
 -- This process will add a table with the name provided
-
--- Calculation groups will only apply to measures. So whatever needs to be in the table will need transferring to a measure. Eg Qty = SUM(... QUANTITY)
+-- Calculation groups will only apply to calculated measures. So whatever needs to be in the table will need transferring from an implict measure to a calculated measure. Eg Qty = SUM(... QUANTITY)
 
 -- In the table will be a 'Calculation item' defaulted with the calculation '= SELECTEDMEASURE'. Change this to the calculation required eg Qty
 -- Add new items for each measure required eg sales, profit average selling price
@@ -21,29 +23,21 @@
 
 -- We can also create a Calculation Group to add totals for the period, same period has last year and a Growth percentage
 
+-- Below are the Calculation Groups used for the Sailun Dealership. This report has two measures (Qty & T/O) split by month. There are calculation group to show the measures by month. 
 
--- If the table calls for a comparsion against multiple metrics (like on BISON) then the varaince and variance% calcs need to be in the same calculation group as the metrics (see BISON 5.2 for more)
+Quantity - Qty = [Qty]
+Turnover - TO = [TO]
 
-Qty Variance = 
-    SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Buy_In_Qty]) - 
-    SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Sell_Out_Qty])
+Then there
+-- is another calculation group to show the KPI's (Period, PY and Growth%)
 
-Qty Variance % = 
-    FORMAT(
-    DIVIDE( SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Buy_In_Qty]) - 
-        SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Sell_Out_Qty]) , 
-        SUM(Buy_In_Sell_Out_Summary_Inc_STSPCODE_Details[Total_Buy_In_Qty]) 
-    ),
-    "percent")
-
-
--- If the table calls for a comparison on a single metrics (like in the Dealership Analysis - Sailun report) then follow the steps below:
--- Add a new calculation group and call KPI's
+Period = FORMAT( SELECTEDMEASURE(), "#,##0")
 
 -- Change the Calculation item to Period and leave the calculuation as 'Period = SELECTEDMEASE()'
 
 -- For the same period as last year add a new calculation item and use this calc:
 
+Period - 
 LY = 
  IF(
     NOT ( ISINSCOPE('Sailun Dealerships'[Month])),
@@ -53,22 +47,60 @@ LY =
         )
  )
 
+Previous Year - 
+PY = 
+  IF(
+    NOT ( ISINSCOPE('Dealerships Query'[Month])),
+       CALCULATE(
+            FORMAT( SELECTEDMEASURE(), "#,##0"),
+            SAMEPERIODLASTYEAR('Dealerships Query'[INVDATE].[Date])
+       )   
+ )
 
--- For the Growth% use this calc:
+Growth% - 
 Growth% = 
 VAR CY = SELECTEDMEASURE()
 VAR LY = 
     CALCULATE(
         SELECTEDMEASURE(),
-        SAMEPERIODLASTYEAR( 'Sailun Dealerships'[INVDATE].[Date])
+        SAMEPERIODLASTYEAR( 'Dealerships Query'[INVDATE].[Date])
     )
 RETURN
     IF(
-        CY && LY && NOT ( ISINSCOPE('Sailun Dealerships'[Month])),
-        DIVIDE( CY, LY ) - 1)
+        CY && LY && NOT ( ISINSCOPE('Dealerships Query'[Month])),
+       FORMAT( DIVIDE( CY, LY ) - 1, "percent"))
 
 
 -- If using two calculaiton groups remember to stack then as Metrics, KPI's and Month Name in the 'Columns' pane
 
--- example report is SAIL
+-- example report is Dealership Analysis - Sailun
 -- source link https://community.fabric.microsoft.com/t5/Community-Blog/Calculation-Groups-in-Power-BI/ba-p/3590905
+
+-- ######################################################################################################################################
+-- Another example of a calculation group is from BISON
+
+-- The measures are 'Qty_Buy_In', Qty_Sell_Out' and the same but for weights. 
+
+-- The conditional calcs are:
+
+Period - 
+Period = SELECTEDMEASURE()
+
+PY - 
+PY = 
+CALCULATE(
+   SELECTEDMEASURE(),
+   DATEADD ('Date'[Date].[Date], -1, YEAR)
+)
+
+Variance - 
+Var = 
+SELECTEDMEASURE() -
+
+CALCULATE(
+   SELECTEDMEASURE(),
+   DATEADD ('Date'[Date].[Date], -1, YEAR)
+)
+
+
+
