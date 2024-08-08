@@ -1,0 +1,31 @@
+Status = 
+IF( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]),  
+
+SWITCH(TRUE(),
+// on target
+// forecast achieve calc
+(IF( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]), [Sales] ) - 
+    IF( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]), SUM  (Latest_Forecast_for_All_Areas[FORECAST]))) /
+    IF( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]), SUM(Latest_Forecast_for_All_Areas[FORECAST])) >= 
+
+// time passed calc
+NETWORKDAYS( STARTOFMONTH( Dates[.1 - Report Date].[Date]), TODAY(), 1, VALUES('Bank Holidays'[Bank Holidays])) / SUM( Dates[Current Month Working Days]), "On Target",
+// within 10%
+// forecast achieve calc
+(IF( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]), [Sales] ) - 
+    IF( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]), SUM  (Latest_Forecast_for_All_Areas[FORECAST]))) /
+    IF( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]), SUM(Latest_Forecast_for_All_Areas[FORECAST])) >= 
+
+// time passed calc
+NETWORKDAYS( STARTOFMONTH( Dates[.1 - Report Date].[Date]), TODAY(), 1, VALUES('Bank Holidays'[Bank Holidays])) / SUM( Dates[Current Month Working Days])-0.1, "Within 10%", 
+// below 10%
+// current month sales calc
+(IF( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]), [Sales] ) ) > 0.1, "Below 10%",
+// no forecast
+// forecast achieve calc
+IF( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]), SUM(Latest_Forecast_for_All_Areas[FORECAST])) = 0,
+     "No Forecast",
+IFERROR( MAX('Latest_Forecast_for_All_Areas'[YEAR_MONTH]) = MAX('Rolling Calendar'[yyyym]), SUM(Latest_Forecast_for_All_Areas[FORECAST]))    =     0, "No Forecast",
+
+"No Sales"
+    ))
