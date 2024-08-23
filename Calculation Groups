@@ -81,6 +81,10 @@ RETURN
 
 -- The measures are 'Qty_Buy_In', Qty_Sell_Out' and the same but for weights. 
 
+-- This calc uses a date table. The date table is required because it is needed to list out all the dates in the period. Using date local or invoice date may miss out dates like weekends and bank holidays. 
+-- It is important to use the date table fields like 'year' in the matrix table, or the calc below won't work
+-- See 'DateTable' for instructions on how to create a date table in Power BI
+
 -- The conditional calcs are:
 
 Period - 
